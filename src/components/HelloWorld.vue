@@ -1,18 +1,34 @@
 <template>
-    <div id="app">
-      <img v-bind:src="picture"
-      :alt="`${firstName} ${lastName}`"
-      :class="gender"
-      />
-      <h1>{{ firstName }} {{ lastName }}</h1>
-      <h3>Email:{{ email }}</h3>
-      <h4>Gender:{{ gender }}</h4>
-      <button :class="gender" @click="getUser()">Get a Random User</button>
+ <div id="app">
+     <table border="2" v-bind:cellspacing="5" v-bind:cellpadding="10">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>UserName</th>
+          <th>Email</th>
+          <th>City</th>
+          <th>Phone</th>
+          <th>Company Name</th>
+        </tr>
+      </thead>
 
-
-    </div>
-
+      <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.address.city }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.company.name }}</td>
+          </tr>
+      </tbody>
+     </table>
+ </div>
 </template>
+
+
 
 
 <script>
@@ -23,24 +39,36 @@ export default {
   },
   data(){
     return{
-      firstName:"John",
-      lastName:"Doe",
-      email:"john@gmail.com",
-      gender:"male",
-      picture:"https://randomuser.me/api/portraits/men/60.jpg"
+          title:"Fetching the Data from Jsonplaceholders...",
+          intro:"Getting the Data from Jsonplaceholders...",
+          users:[]
     }
   },
-  methods:{
-    async getUser(){
-      const res=await fetch("https://randomuser.me/api/")
-      const {results}=await res.json()
-      // console.log(results)
 
-      this.firstName=results[0].name.first;
-      this.lastName=results[0].name.last;
-      this.email=results[0].email;
-      this.gender=results[0].gender;
-      this.picture=results[0].picture.large;
+  computed:{
+
+  },
+
+  created(){
+    console.log("It will execute when the component is created")
+  },
+  mounted(){
+    this.fetchUsers();
+    console.log("It will execute when the component is mounted")
+  },
+
+  methods:{
+    fetchUsers(){
+      fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) =>response.json())
+      .then((data)=>{
+        //use loop mechanism to get the
+        // for(let i=0;i<data.length;i++){
+        //   console.log(`Name ${data[i].name}`);
+        // }
+        this.users=data;
+
+      })
     }
   }
 }
@@ -65,9 +93,7 @@ a {
 
 
 #app{
-  background-color: rgb(246, 226, 226);
-  width:400px;
-  height: 100vh;
+  background: rgb(246, 226, 226);
   margin: auto;
   text-align: center;
   display: flex;
@@ -77,39 +103,10 @@ a {
 }
 
 
-h1,h3{
-  margin-bottom: 8px;
-  font-weight: normal;
-}
-
-img{
-  border-radius: 50%;
-  border:5px solid rgb(255, 0, 191);
-  margin-bottom: 8px;
+table:hover{
+  background-color: greenyellow;
+  cursor:pointer
 }
 
 
-.male{
-  border-color:aquamarine;
-  background-color:rgb(171, 115, 245) ;
-}
-
-.female{
-  border-color:rgb(219, 64, 175);
-  background-color:rgb(245, 245, 115) ;
-}
-
-button{
-  cursor:pointer;
-  display: inline-block;
-  background: white;
-  color:black;
-  font-size: 18px;
-  border:0;
-  border-radius: 20px;
-}
-
-button:hover{
-  background-color: yellow;
-}
 </style>
