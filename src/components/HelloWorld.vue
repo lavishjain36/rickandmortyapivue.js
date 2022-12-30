@@ -1,29 +1,14 @@
 <template>
 <div id="app">
-  <h1>Brewery List of Items</h1>
-  <table border="2" cellspacing="5" cellpadding="5">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Brwery Type</th>
-          <th>City</th>
-          <th>State</th>
-          <th>Country</th>
-          <th>Postal Code</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="brewery in breweries" :key="brewery.id">
-           <td>{{ brewery.name }}</td>
-           <td>{{ brewery.brewery_type }}</td>
-           <td>{{ brewery.city }}</td>
-           <td>{{ brewery.state }}</td>
-           <td>{{ brewery.country }}</td>
-           <td>{{ brewery.postal_code }}</td>
-        </tr>
-      </tbody>
-  </table>
-  </div>
+   <div id="test" v-for="data of info" v-bind:key="data.id">
+    {{ data.name }} <br>
+    {{ data.species }} <br>
+    {{ data.gender }} <br> 
+    <img v-bind:src="data.image">
+   
+   </div>
+  <button @click="fetch">Submit</button>
+</div>
 </template>
 
 <script>
@@ -35,19 +20,18 @@ export default {
   },
   data(){
     return{
-      breweries:[]
+      info:[]
     }
   },
-  mounted(){
-    axios.get("https://api.openbrewerydb.org/breweries")
-    .then(response=>{
-    
-      this.breweries=response.data;
-     
+  methods:{
+  fetch(){
+    axios.get("https://rickandmortyapi.com/api/character")
+    .then(res=>{
+      // console.log(res.data.results);
+      this.info=res.data.results;
+      
     })
-    .catch(error=>{
-      console.log(error)
-    })
+  }  
   }
   
 }
@@ -71,13 +55,17 @@ a {
 }
 
 #app{
-  margin-left:200px;
+  margin-left:0;
 }
 
-table:hover{
-  background-color: greenyellow;
-  cursor:pointer
+#test{
+  background-color: rgb(255, 198, 42);
+  width: 600px;
 }
 
+img{
+  border:2px solid red;
+  border-radius: 50%;
+}
 
 </style>
