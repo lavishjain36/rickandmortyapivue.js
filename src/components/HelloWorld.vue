@@ -1,37 +1,33 @@
 <template>
- <div id="app">
-     <table border="2" v-bind:cellspacing="5" v-bind:cellpadding="10">
+<div id="app">
+  <h1>Brewery List of Items</h1>
+  <table border="2" cellspacing="5" cellpadding="5">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Name</th>
-          <th>UserName</th>
-          <th>Email</th>
+          <th>Brwery Type</th>
           <th>City</th>
-          <th>Phone</th>
-          <th>Company Name</th>
+          <th>State</th>
+          <th>Country</th>
+          <th>Postal Code</th>
         </tr>
       </thead>
-
       <tbody>
-          <tr v-for="user in users" :key="user.id">
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.address.city }}</td>
-            <td>{{ user.phone }}</td>
-            <td>{{ user.company.name }}</td>
-          </tr>
+        <tr v-for="brewery in breweries" :key="brewery.id">
+           <td>{{ brewery.name }}</td>
+           <td>{{ brewery.brewery_type }}</td>
+           <td>{{ brewery.city }}</td>
+           <td>{{ brewery.state }}</td>
+           <td>{{ brewery.country }}</td>
+           <td>{{ brewery.postal_code }}</td>
+        </tr>
       </tbody>
-     </table>
- </div>
+  </table>
+  </div>
 </template>
 
-
-
-
 <script>
+import axios from 'axios';
 export default {
   name: 'HelloWorld',
   props: {
@@ -39,38 +35,21 @@ export default {
   },
   data(){
     return{
-          title:"Fetching the Data from Jsonplaceholders...",
-          intro:"Getting the Data from Jsonplaceholders...",
-          users:[]
+      breweries:[]
     }
-  },
-
-  computed:{
-
-  },
-
-  created(){
-    console.log("It will execute when the component is created")
   },
   mounted(){
-    this.fetchUsers();
-    console.log("It will execute when the component is mounted")
-  },
-
-  methods:{
-    fetchUsers(){
-      fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) =>response.json())
-      .then((data)=>{
-        //use loop mechanism to get the
-        // for(let i=0;i<data.length;i++){
-        //   console.log(`Name ${data[i].name}`);
-        // }
-        this.users=data;
-
-      })
-    }
+    axios.get("https://api.openbrewerydb.org/breweries")
+    .then(response=>{
+    
+      this.breweries=response.data;
+     
+    })
+    .catch(error=>{
+      console.log(error)
+    })
   }
+  
 }
 </script>
 
@@ -91,17 +70,9 @@ a {
   color: #42b983;
 }
 
-
 #app{
-  background: rgb(246, 226, 226);
-  margin: auto;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-left:200px;
 }
-
 
 table:hover{
   background-color: greenyellow;
